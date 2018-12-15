@@ -8,7 +8,10 @@ class SlidingWindow(object):
         self.db = redis.Redis(host=host, port=port)
         self.newsQueueSize = queueSize
         self.newsQueueName = newsQueueName
-    
+		
+    def endRedis(self):
+        self.db.connection_pool.disconnect()
+		
     def put(self, key, value):
         if not isinstance(value,dict):
             print ("Value needs to be a dictionary " + key)
