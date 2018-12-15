@@ -8,10 +8,10 @@ class SlidingWindow(object):
         self.db = redis.Redis(host=host, port=port)
         self.newsQueueSize = queueSize
         self.newsQueueName = newsQueueName
-		
+    
     def endRedis(self):
         self.db.connection_pool.disconnect()
-		
+        
     def put(self, key, value):
         if not isinstance(value,dict):
             print ("Value needs to be a dictionary " + key)
@@ -34,7 +34,7 @@ class SlidingWindow(object):
         return val
     
     def delete(self, key):
-        if key == 'news':
+        if key == self.newsQueueName:
             print ("Call freeQueue() function instead")
             return False
         
@@ -99,7 +99,7 @@ class SlidingWindow(object):
         for key in keys:
             key = key.decode("utf-8")
             self.delete(key)
-        self.db.delete('news')
+        self.db.delete(self.newsQueueName)
     
     ################Sliding window key-value object storage implementation##################
     
@@ -136,4 +136,4 @@ class SlidingWindow(object):
         
         return objects
             
-            
+        
